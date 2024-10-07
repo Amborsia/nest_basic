@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -27,6 +28,7 @@ export class AppController {
       title: '반지의 제왕',
     },
   ];
+  private idCounter = 3;
   constructor(private readonly appService: AppService) {}
 
   @Get()
@@ -44,20 +46,24 @@ export class AppController {
     }
   }
   @Post()
-  postMovie() {
-    return {
-      id: 3,
-      name: '어벤져스',
-      character: ['아이언맨', '캡틴아메리카'],
+  postMovie(@Body('title') title: string) {
+    const movie: Movie = {
+      id: this.idCounter++,
+      title: title,
     };
+    this.movies.push(movie);
+    return movie;
   }
   @Patch(':id')
-  patchMovie() {
-    return {
-      id: 3,
-      name: '어벤져스',
-      character: ['아이언맨', '블랙위도우'],
-    };
+  patchMovie(@Param('id') id: string, @Body('title') title: string) {
+    const movie = this.movies.find((m) => m.id === +id);
+
+    if (!movie) {
+      throw new NotFoundException('존재하지 않는 ID의 영화입니다.');
+    } else {
+      Object.assign(movie, { title });
+      return movie;
+    }
   }
   @Delete(':id')
   deleteMovie() {
