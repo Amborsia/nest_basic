@@ -42,6 +42,10 @@ export class UpdateMovieDto {
   @IsNotEmpty()
   @IsOptional()
   genre?: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  detail?: string;
   /// null이거나 undefined를 체크
   //   @IsDefined()
 

@@ -66,23 +66,28 @@ export class MovieService {
       where: {
         id,
       },
+      relations: ['detail'],
     });
 
     if (!movie) {
-      throw new NotFoundException('존재하지 않는 ID의 영화입니다.');
-    } else {
-      this.movieRepository.update(
-        {
-          id,
-        },
-        updateMovieDto,
-      );
+      throw new NotFoundException('존재하지 않는 ID의 영화입니다!');
     }
 
+    const { detail, ...movieRest } = updateMovieDto;
+
+    await this.movieRepository.update({ id }, movieRest);
+
+    if (detail) {
+      await this.movieDetailRepository.update(
+        { id: movie.detail.id },
+        { detail },
+      );
+    }
     const newMovie = await this.movieRepository.findOne({
       where: {
         id,
       },
+      relations: ['detail'],
     });
     return newMovie;
   }
