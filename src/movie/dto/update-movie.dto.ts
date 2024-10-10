@@ -37,15 +37,23 @@ import {
 
 export class UpdateMovieDto {
   @IsNotEmpty()
+  @IsString()
   @IsOptional()
   title?: string;
   @IsNotEmpty()
+  @IsString()
   @IsOptional()
   genre?: string;
 
   @IsNotEmpty()
+  @IsString()
   @IsOptional()
   detail?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
+  directorId: number;
   /// null이거나 undefined를 체크
   //   @IsDefined()
 
