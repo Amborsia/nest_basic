@@ -11,11 +11,13 @@ import {
   ClassSerializerInterceptor,
   ParseIntPipe,
   ParseFloatPipe,
+  Request,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieTitleValidationPipe } from './pipe/movie-title-validation.pipe';
+import { log } from 'console';
 
 @Controller('movie')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -23,7 +25,11 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get()
-  getMovies(@Query('title', MovieTitleValidationPipe) title?: string) {
+  getMovies(
+    @Request() req: any,
+    @Query('title', MovieTitleValidationPipe) title?: string,
+  ) {
+    console.log(req);
     return this.movieService.findAll(title);
   }
   @Get(':id')
